@@ -53,3 +53,97 @@ function initGame() {
    
     board.style.gridTemplateColumns = `repeat(${cols}, 100px)`;
 }
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+
+function flipCard() {
+    if (!gameActive || flippedCards.length >= 2 || this.classList.contains('flipped')) {
+        return;
+    }
+
+    this.classList.add('flipped');
+    this.textContent = this.dataset.value;
+    flippedCards.push(this);
+
+    if (flippedCards.length === 2) {
+        attempts++;
+        attemptsDisplay.textContent = attempts;
+        checkForMatch();
+    }
+}
+function checkForMatch() {
+    const [firstCard, secondCard] = flippedCards;
+
+    if (firstCard.dataset.value === secondCard.dataset.value) {
+        matchedCards.push(firstCard, secondCard);
+        remainingPairs--;
+        remainingDisplay.textContent = remainingPairs;
+        showMessage("¡Has encontrado una pareja!");
+
+        if (remainingPairs === 0) {
+            showMessage('¡Felicidades! Has encontrado todas las parejas.');
+            setTimeout(initGame, 2000);
+        }
+    } else {
+        showMessage("Fallaste. Inténtalo de nuevo.");
+        setTimeout(() => {
+            firstCard.classList.remove('flipped');
+            firstCard.textContent = '';
+            secondCard.classList.remove('flipped');
+            secondCard.textContent = '';
+        }, 1000);
+    }
+
+    flippedCards = [];
+    if (attempts >= maxAttempts) {
+        gameActive = false; 
+        showMessage("¡Se han agotado los intentos! Fin del juego.");
+    }
+}
+
+
+function showMessage(message) {
+    messageDisplay.textContent = message;
+    setTimeout(() => {
+        messageDisplay.textContent = '';
+    }, 1000);
+}
+
+
+setDifficultyButton.addEventListener('click', () => {
+    const difficulty = difficultySelect.value;
+
+    if (difficulty === 'easy') {
+        rows = 3; cols = 4;
+        maxAttempts = 16; 
+    } else if (difficulty === 'medium') {
+        rows = 4; cols = 4;
+        maxAttempts = 16; 
+    } else if (difficulty === 'hard') {
+        rows = 2; cols = 6;
+        maxAttempts = 10; 
+    } else if (difficulty === 'custom') {
+        rows = parseInt(rowsInput.value);
+        cols = parseInt(colsInput.value);
+        if ((rows * cols) % 2 !== 0) {
+            alert("El número total de casillas debe ser par.");
+            return;
+        }
+        if (rows < 1 || cols < 1) {
+            alert("Por favor, introduce valores válidos para filas y columnas.");
+            return;
+        }
+        maxAttempts = 11; 
+    }
+
+   
+    initGame();
+});
+
+
+window.onload = initGame;
