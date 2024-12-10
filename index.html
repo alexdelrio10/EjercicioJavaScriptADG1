@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EjercicioJavaScriptADG</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Encontrar Parejas</h1>
+        <h2>Autor: Alex</h2>
+        
+        <div class="info">
+            <div>
+                <p>Intentos: <span id="attempts">0</span></p>
+                <p>Parejas restantes: <span id="remaining">6</span></p>
+            </div>
+            <div>
+                <label for="difficulty">Dificultad:</label>
+                <select id="difficulty">
+                    <option value="easy">Fácil (4x3)</option>
+                    <option value="medium">Medio (4x4)</option>
+                    <option value="hard">Difícil (6x2)</option>
+                    <option value="custom">Personalizado</option>
+                </select>
+                <div id="customInputs" style="display: none;">
+                    <input type="number" id="rows" placeholder="Filas (par)" min="1" />
+                    <input type="number" id="cols" placeholder="Columnas (par)" min="1" />
+                </div>
+                <button id="setDifficulty">Seleccionar dificultad</button>
+            </div>
+        </div>
+
+        <div class="board" id="board"></div>
+        <div id="message"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
